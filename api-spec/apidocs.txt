@@ -1,0 +1,163 @@
+openapi: 3.0.0
+info:
+  title: News API
+  version: 1.0.0
+  description: API for managing news articles
+paths:
+  /register:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - name
+                - email
+                - password
+      responses:
+        '200':
+          description: Successful registration
+  /login:
+    post:
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Successful login
+  /logout:
+    post:
+      summary: User logout
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully logged out
+  /news:
+    get:
+      summary: Get list of news articles
+      responses:
+        '200':
+          description: List of news articles
+    post:
+      summary: Create a new news article
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+                description:
+                  type: string
+              required:
+                - title
+                - image
+                - description
+      responses:
+        '201':
+          description: News article created successfully
+  /news/{newsId}:
+    get:
+      summary: Get a news article by ID
+      parameters:
+        - name: newsId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: News article details
+    put:
+      summary: Update a news article by ID
+      parameters:
+        - name: newsId
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+                description:
+                  type: string
+              required:
+                - title
+                - description
+      responses:
+        '200':
+          description: News article updated successfully
+    delete:
+      summary: Delete a news article by ID
+      parameters:
+        - name: newsId
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: News article deleted successfully
+  /news/{newsId}/activity-log:
+    get:
+      summary: Get activity log for a news article
+      parameters:
+        - name: newsId
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of activity logs for the news article
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

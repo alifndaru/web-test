@@ -163,6 +163,7 @@ return [
         /*
          * Application Service Providers...
          */
+        Laravel\Sanctum\SanctumServiceProvider::class,
         Spatie\Activitylog\ActivitylogServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
